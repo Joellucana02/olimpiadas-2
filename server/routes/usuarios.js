@@ -7,7 +7,13 @@ const jwt = require("jsonwebtoken");
 const secret =
   "The server will store a secret key used to encrypt and decrypt the token";
 
-router.get("/", async (req, res, next) => {
+const {
+  isAdmin,
+  ensureLoggedIn,
+  ensureCurrentUser,
+} = require("./user_middlewares");
+
+router.get("/", ensureLoggedIn, isAdmin, async (req, res, next) => {
   try {
     const users = await db.query(`SELECT * FROM users`);
 
@@ -17,20 +23,25 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/user/:id", async (req, res, next) => {
-  try {
-    const user_id = req.params.id;
-    const user = await db.query(`SELECT * FROM users WHERE users_id = ($1)`, [
-      user_id,
-    ]);
+router.get(
+  "/user/:id",
+  ensureLoggedIn,
+  ensureCurrentUser,
+  async (req, res, next) => {
+    try {
+      const user_id = req.params.id;
+      const user = await db.query(`SELECT * FROM users WHERE users_id = ($1)`, [
+        user_id,
+      ]);
 
-    return res.json(user.rows[0]);
-  } catch (error) {
-    return next(error);
+      return res.json(user.rows[0]);
+    } catch (error) {
+      return next(error);
+    }
   }
-});
+);
 
-router.post("/", async (req, res, next) => {
+router.post("/", ensureLoggedIn, isAdmin, async (req, res, next) => {
   try {
     const info = req.body;
     const hashedPassword = await bcrypt.hash(info.password, 10);
@@ -39,7 +50,7 @@ router.post("/", async (req, res, next) => {
       [info.name, info.email, hashedPassword, info.access]
     );
 
-    return res.json(user.rows[0]);
+    return next(res.json(user.rows[0]));
   } catch (error) {
     return next(error);
   }
@@ -66,6 +77,8 @@ router.post("/login", async (req, res, next) => {
       return res.json({ message: "invalid password" });
     }
 
+    req.tipoDeAcceso = encontrarUsuario.rows[0].access;
+
     const token = jwt.sign({ email: encontrarUsuario.rows[0].email }, secret, {
       expiresIn: 60 * 60,
     });
@@ -76,20 +89,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-function ensureLoggedIn(req, res, next) {
-  try {
-    const tokenRecibido = req.headers.authorization.split(" ")[1];
-    console.log(tokenRecibido);
-
-    const token = jwt.verify(tokenRecibido, secret);
-
-    return next();
-  } catch (error) {
-    return res.status(401).json({ message: "Sin autorizacion" });
-  }
-}
-
-router.get("/dashboard", ensureLoggedIn, async (req, res, next) => {
+router.get("/dashboard", ensureLoggedIn, isAdmin, async (req, res, next) => {
   try {
     return res.json({ message: "You made it!" });
   } catch (error) {
