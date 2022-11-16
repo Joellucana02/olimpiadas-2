@@ -7,8 +7,8 @@ CREATE DATABASE codigo_azul_app;
 CREATE TABLE users (
   users_id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
   access BOOLEAN NOT NULL
 );
 
@@ -31,13 +31,13 @@ CREATE TABLE sala(
 CREATE TABLE paciente (
     paciente_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    dni VARCHAR(10) NOT NULL
+    dni VARCHAR(10) NOT NULL UNIQUE
 );
 
 CREATE TABLE personal_medico (
     personal_medico_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    dni VARCHAR(10) NOT NULL
+    dni VARCHAR(10) NOT NULL UNIQUE
 );
 
 CREATE TABLE llamados(
