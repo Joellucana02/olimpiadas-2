@@ -75,7 +75,7 @@ CREATE TABLE ficha_medica(
 const { Client } = require("pg");
 
 const client = new Client({
-  connectionString: `postgresql://yourpassword:matias@localhost/codigo_azul_app`,
+  connectionString: `postgresql://postgres:yourpassword@localhost/codigo_azul_app`,
 });
 
 client.connect();

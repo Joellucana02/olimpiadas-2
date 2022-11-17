@@ -97,28 +97,45 @@ router.get("/dashboard", ensureLoggedIn, isAdmin, async (req, res, next) => {
   }
 });
 
-router.patch("/user/:id", async (req, res, next) => {
-  try {
-    const info = await db.query(`SELECT * FROM users WHERE users_id = $1`, [
-      req.params.id,
-    ]);
-
-    console.log(info.rows[0]);
-    const user = await db.query(
-      `UPDATE users SET name=$1,email=$2,password=$3,access=$4 WHERE users_id = $5 RETURNING *  `,
-      [
-        req.body.name || info.rows[0].name,
-        req.body.email || info.rows[0].email,
-        req.body.password || info.rows[0].password,
-        req.body.access || info.rows[0].access,
+router.patch(
+  "/user/:id",
+  ensureLoggedIn,
+  ensureCurrentUser,
+  async (req, res, next) => {
+    try {
+      const info = await db.query(`SELECT * FROM users WHERE users_id = $1`, [
         req.params.id,
-      ]
-    );
-    return res.json(user.rows[0]);
-  } catch (error) {
-    return next(error);
+      ]);
+
+      /* console.log(info.rows[0]); */
+      if (req.body.access === false) {
+        const user = await db.query(
+          `UPDATE users SET name=$1,email=$2,password=$3,access=$4 WHERE users_id = $5 RETURNING *  `,
+          [
+            req.body.name || info.rows[0].name,
+            req.body.email || info.rows[0].email,
+            req.body.password || info.rows[0].password,
+            req.body.access,
+            req.params.id,
+          ]
+        );
+      }
+      const user = await db.query(
+        `UPDATE users SET name=$1,email=$2,password=$3,access=$4 WHERE users_id = $5 RETURNING *  `,
+        [
+          req.body.name || info.rows[0].name,
+          req.body.email || info.rows[0].email,
+          req.body.password || info.rows[0].password,
+          req.body.access,
+          req.params.id,
+        ]
+      );
+      return res.json(user.rows[0]);
+    } catch (error) {
+      return next(error);
+    }
   }
-});
+);
 
 router.delete("/user/:id", async (req, res, next) => {
   try {

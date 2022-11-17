@@ -36,6 +36,7 @@ async function ensureLoggedIn(req, res, next) {
 
     req.currentEmail = token.email;
     req.currentId = user.rows[0].users_id;
+    req.canAccess = user.rows[0].access;
     /*  console.log("ensureloggedIn"); */
     /* console.log(user.rows[0]); */
     return next();
@@ -44,11 +45,13 @@ async function ensureLoggedIn(req, res, next) {
   }
 }
 
+/* ensure current user or admin */
 function ensureCurrentUser(req, res, next) {
   try {
     console.log(req.currentId);
     console.log(req.params.id * 1);
-    if (req.currentId === req.params.id * 1) {
+    console.log(req.canAccess);
+    if (req.currentId === req.params.id * 1 || req.canAccess) {
       return next();
     } else {
       return res
