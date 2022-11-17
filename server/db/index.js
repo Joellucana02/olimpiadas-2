@@ -31,13 +31,13 @@ CREATE TABLE sala(
 CREATE TABLE paciente (
     paciente_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    dni VARCHAR(10) NOT NULL UNIQUE
+    dni VARCHAR(10) UNIQUE NOT NULL
 );
 
 CREATE TABLE personal_medico (
     personal_medico_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    dni VARCHAR(10) NOT NULL UNIQUE
+    dni VARCHAR(10) UNIQUE NOT NULL
 );
 
 CREATE TABLE llamados(
@@ -75,7 +75,7 @@ CREATE TABLE ficha_medica(
 const { Client } = require("pg");
 
 const client = new Client({
-  connectionString: `postgresql://postgres:yourpassword@localhost/codigo_azul_app`,
+  connectionString: `postgresql://yourpassword:matias@localhost/codigo_azul_app`,
 });
 
 client.connect();

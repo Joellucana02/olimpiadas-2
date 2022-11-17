@@ -4,12 +4,24 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const testRoute = require("./routes/ruta-primaria");
 const usersRoute = require("./routes/usuarios");
+const zonasRoute = require("./routes/zonas");
+const pacientesRoute = require("./routes/pacientes");
+const enfermerosRoute = require("./routes/enfermeros");
+const salasRoute = require("./routes/salas");
+const llamadosRoute = require("./routes/llamados");
+const ficha_medicaRoute = require("./routes/fichas");
 app.use(morgan("tiny"));
 
 app.use(bodyParser.json());
 
 /* app.use("/", testRoute); */
 app.use("/users", usersRoute);
+app.use("/zonas", zonasRoute);
+app.use("/enfermeros", enfermerosRoute);
+app.use("/pacientes", pacientesRoute);
+app.use("/salas", salasRoute);
+app.use("/llamados", llamadosRoute);
+app.use("/fichas", ficha_medicaRoute);
 
 app.use((req, res, next) => {
   let err = new Error("not found");
