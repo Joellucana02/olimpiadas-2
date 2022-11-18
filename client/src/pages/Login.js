@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthLogin } from "../auth/auth";
 
 const Login = () => {
+  const [litToken, setLitToken] = useState("");
   const navigate = useNavigate();
   /* const [isLogged, setIsLogged] = useState(false) */
   const [formValues, setFormValues] = useState({
@@ -16,16 +17,18 @@ const Login = () => {
     console.log("w");
     AuthLogin(formValues);
     const token = localStorage.getItem("token");
+    setLitToken(token);
     if (token) {
       console.log(token);
     }
   };
-  /* 
-  useEffect(() => {
+  /*  navigate("/"); */
+
+  /* useEffect(() => {
     setTimeout(() => {
       navigate("/");
     }, 1000);
-  }, [token]);
+  }, [litToken]);
  */
   return (
     <div>

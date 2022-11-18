@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useContext } from "react";
-
+import { useNavigate } from "react-router-dom";
 export const AuthLogin = async (data) => {
+  /* const navigate = useNavigate(); */
   try {
     console.log(`${data.email}, ${data.password}`);
     /* const la = await axios.get("http://localhost:3010/fichas"); */
@@ -15,6 +16,9 @@ export const AuthLogin = async (data) => {
     /* console.log(loggedUser.data.token); */
     if (loggedUser.data.token) {
       localStorage.setItem("token", loggedUser.data.token);
+      localStorage.setItem("access", loggedUser.data.access);
+      localStorage.setItem("id", loggedUser.data.id);
+      /* navigate("/"); */
     }
   } catch (error) {
     console.log("error");

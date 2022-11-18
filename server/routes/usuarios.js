@@ -83,7 +83,11 @@ router.post("/login", async (req, res, next) => {
       expiresIn: 60 * 60,
     });
 
-    return res.json({ token });
+    return res.json({
+      token,
+      access: encontrarUsuario.rows[0].access,
+      id: encontrarUsuario.rows[0].users_id,
+    });
   } catch (error) {
     return next(error);
   }

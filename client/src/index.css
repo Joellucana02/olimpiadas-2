@@ -18,3 +18,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.cua {
+  background-color: #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.item-container {
+  background-color: #999;
+
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+.item-container:nth-child(even) {
+  background-color: #ccc;
+}
+.Boton-emergencia {
+  color: aqua;
+}
