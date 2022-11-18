@@ -10,8 +10,10 @@ const enfermerosRoute = require("./routes/enfermeros");
 const salasRoute = require("./routes/salas");
 const llamadosRoute = require("./routes/llamados");
 const ficha_medicaRoute = require("./routes/fichas");
-app.use(morgan("tiny"));
+const cors = require("cors");
 
+app.use(cors());
+app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
 /* app.use("/", testRoute); */
@@ -36,6 +38,12 @@ if (app.get("env") === "development") {
   });
 }
 
-app.listen(3000, () => {
-  console.log("server running on port 3000");
+/* var os = require("os");
+var networkInterfaces = os.networkInterfaces();
+var arr = networkInterfaces["Local Area Connection 3"];
+var ip = arr[1].address; */
+
+/* console.dir(req.ip); */
+app.listen(3010, () => {
+  console.log(`server running on port 3000`);
 });
